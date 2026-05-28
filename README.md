@@ -4,6 +4,8 @@ Microsoft Learn の「ASP.NET Core と Azure を使用して最新の Web アプ
 
 原典のサイドメニューにある 11 ページを 11 章として扱い、各章の主要見出しを短いメモに分割します。逐語訳ではなく、設計判断、実務で見る観点、ASP.NET Core / Azure の選択肢を後から確認しやすくまとめます。
 
+公開 URL: <https://t-shirayama.github.io/dotnet-modern-web-apps-notes/>
+
 ## 到達目標
 
 | 分野 | 合格ライン |
@@ -53,6 +55,12 @@ npm run dev
 npm run build
 ```
 
+型チェック:
+
+```bash
+npm run typecheck
+```
+
 プレビュー:
 
 ```bash
@@ -79,6 +87,7 @@ docs/
 - 表示順はファイル名先頭の番号で決まる。
 - 各章の参考リンクは、章末尾の `xx_参考サイト.md` にまとめる。
 - 本文は原典の要点を日本語の備忘録として再構成し、長い引用や転載を避ける。
+- Mermaid 図は自分で内容を確認した Markdown に限って追加する。
 
 ## 公開
 

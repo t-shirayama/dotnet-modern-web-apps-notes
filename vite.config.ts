@@ -2,25 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import type { Chapter } from "./src/types";
 
 const virtualModuleId = "virtual:notes-content";
 const resolvedVirtualModuleId = `\0${virtualModuleId}`;
-
-type Note = {
-  id: string;
-  order: number;
-  fileName: string;
-  title: string;
-  markdown: string;
-};
-
-type Chapter = {
-  id: string;
-  order: number;
-  folderName: string;
-  title: string;
-  notes: Note[];
-};
 
 function stripNumberPrefix(value: string): string {
   return value.replace(/^\d+[_\s-]*/, "").replace(/\.md$/, "");

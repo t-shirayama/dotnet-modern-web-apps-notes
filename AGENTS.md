@@ -16,10 +16,12 @@
 - Avoid copying source text verbatim. Rewrite as Japanese learning notes with practical interpretation.
 - Add Mermaid diagrams when they make architecture, dependency direction, workflow, testing, or hosting decisions easier to understand.
 - Prefer `flowchart` Mermaid diagrams for explanatory notes. Keep diagrams focused, and pair them with short surrounding prose.
+- Mermaid diagrams are rendered from Markdown into SVG. Treat externally supplied Mermaid content as review-required content.
 
 ## Commands
 
 - `npm ci` installs dependencies.
 - `npm run dev` starts the local Vite server.
+- `npm run typecheck` runs TypeScript without emitting files.
 - `npm run build` verifies TypeScript and production output.
 - `npm run preview` serves the production build locally.

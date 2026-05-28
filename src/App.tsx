@@ -4,8 +4,9 @@ import rehypeHighlight from "rehype-highlight";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Chapter, chapters, getChapter } from "./content";
-import { chapterHref, homeHref, parseRoute } from "./router";
+import { chapters, getChapter } from "./content";
+import type { Chapter } from "./types";
+import { chapterHref, homeHref, noteHref, parseRoute } from "./router";
 
 let mermaidPromise: Promise<typeof import("mermaid").default> | undefined;
 
@@ -147,6 +148,17 @@ function Header() {
   );
 }
 
+function EmptyState() {
+  return (
+    <section className="empty-state" aria-label="empty content">
+      <h2>まだ備忘録がありません</h2>
+      <p>
+        <code>docs/01_概要/01_概要.md</code> を追加すると、章一覧に表示されます。
+      </p>
+    </section>
+  );
+}
+
 function HomePage() {
   const totalNotes = chapters.reduce((sum, chapter) => sum + chapter.notes.length, 0);
 
@@ -164,20 +176,24 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="chapter-grid" aria-label="chapters">
-        {chapters.map((chapter) => (
-          <a
-            className="chapter-card"
-            href={chapterHref(chapter.id)}
-            key={chapter.id}
-            onClick={(event) => navigateHash(event, chapterHref(chapter.id))}
-          >
-            <span className="chapter-number">{String(chapter.order).padStart(2, "0")}</span>
-            <h2>{chapter.title}</h2>
-            <p>{chapter.notes.length} notes</p>
-          </a>
-        ))}
-      </section>
+      {chapters.length > 0 ? (
+        <section className="chapter-grid" aria-label="chapters">
+          {chapters.map((chapter) => (
+            <a
+              className="chapter-card"
+              href={chapterHref(chapter.id)}
+              key={chapter.id}
+              onClick={(event) => navigateHash(event, chapterHref(chapter.id))}
+            >
+              <span className="chapter-number">{String(chapter.order).padStart(2, "0")}</span>
+              <h2>{chapter.title}</h2>
+              <p>{chapter.notes.length} notes</p>
+            </a>
+          ))}
+        </section>
+      ) : (
+        <EmptyState />
+      )}
     </main>
   );
 }
@@ -205,7 +221,15 @@ function ChapterNav({ currentChapter }: { currentChapter: Chapter }) {
   );
 }
 
-function ChapterPage({ chapter }: { chapter: Chapter }) {
+function ChapterPage({ chapter, currentNoteId }: { chapter: Chapter; currentNoteId?: string }) {
+  useEffect(() => {
+    if (!currentNoteId) {
+      return;
+    }
+
+    document.getElementById(currentNoteId)?.scrollIntoView({ block: "start" });
+  }, [currentNoteId]);
+
   return (
     <main className="chapter-layout">
       <ChapterNav currentChapter={chapter} />
@@ -220,7 +244,16 @@ function ChapterPage({ chapter }: { chapter: Chapter }) {
           <article className="note-card" id={note.id} key={note.id}>
             <header className="note-header">
               <span>{String(note.order).padStart(2, "0")}</span>
-              <h2>{note.title}</h2>
+              <h2>
+                {note.title}
+                <a
+                  className="note-anchor"
+                  href={noteHref(chapter.id, note.id)}
+                  onClick={(event) => navigateHash(event, noteHref(chapter.id, note.id))}
+                >
+                  Link
+                </a>
+              </h2>
             </header>
             <div className="markdown-body">
               <ReactMarkdown
@@ -255,7 +288,8 @@ function NotFoundPage() {
 
 export default function App() {
   const route = useHashRoute();
-  const routeKey = route.name === "chapter" ? `chapter:${route.chapterId}` : "home";
+  const routeKey =
+    route.name === "chapter" ? `chapter:${route.chapterId}:${route.noteId ?? ""}` : "home";
 
   useLayoutEffect(() => {
     resetScrollImmediately();
@@ -266,7 +300,7 @@ export default function App() {
     return (
       <>
         <Header />
-        {chapter ? <ChapterPage chapter={chapter} /> : <NotFoundPage />}
+        {chapter ? <ChapterPage chapter={chapter} currentNoteId={route.noteId} /> : <NotFoundPage />}
       </>
     );
   }

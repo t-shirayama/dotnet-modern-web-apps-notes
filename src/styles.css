@@ -124,6 +124,24 @@ h3 {
   gap: 16px;
 }
 
+.empty-state {
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #fff;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+}
+
+.empty-state h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #52606d;
+}
+
 .chapter-card {
   min-height: 150px;
   border: 1px solid #d9e2ec;
@@ -268,8 +286,23 @@ h3 {
 }
 
 .note-header h2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
   margin: 0;
   font-size: 1.25rem;
+}
+
+.note-anchor {
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.note-anchor:hover {
+  text-decoration: underline;
 }
 
 .markdown-body {
