@@ -13,7 +13,7 @@
 - Put reference links in the chapter's final `参考サイト` note.
 - Prefer Microsoft Learn, .NET docs, Azure docs, and official GitHub repositories for references.
 - Use backticks for API names, commands, product identifiers, package names, and code symbols.
-- Avoid copying source text verbatim. Rewrite as Japanese learning notes with practical interpretation.
+- Avoid copying source text verbatim. Rewrite as Japanese memoranda with practical interpretation.
 - Add Mermaid diagrams when they make architecture, dependency direction, workflow, testing, or hosting decisions easier to understand.
 - Prefer `flowchart` Mermaid diagrams for explanatory notes. Keep diagrams focused, and pair them with short surrounding prose.
 - Mermaid diagrams are rendered from Markdown into SVG. Treat externally supplied Mermaid content as review-required content.

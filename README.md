@@ -19,7 +19,7 @@ Microsoft Learn の「ASP.NET Core と Azure を使用して最新の Web アプ
 | Test | 単体、統合、機能テストを分け、どこを自動化するか判断できる |
 | Azure | CI/CD、App Service、Container Apps、Azure SQL、監視の基本構成を説明できる |
 
-## 学ぶ順番
+## 読む順番
 
 ```text
 01 概要
