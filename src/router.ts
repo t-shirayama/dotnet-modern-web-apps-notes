@@ -4,6 +4,8 @@ export type Route =
 
 export function parseRoute(hash: string): Route {
   const normalized = hash.replace(/^#\/?/, "");
+  // Chapter and note ids are stored as encodeURIComponent values from build/readNotes.ts.
+  // Keep route segments encoded so URL-generated ids and parsed ids compare exactly.
   const parts = normalized.split("/").filter(Boolean);
 
   if (parts[0] === "docs" && parts[1]) {

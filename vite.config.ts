@@ -1,66 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
-import type { Chapter } from "./src/types";
+import { readChapters } from "./build/readNotes";
 
 const virtualModuleId = "virtual:notes-content";
 const resolvedVirtualModuleId = `\0${virtualModuleId}`;
-
-function stripNumberPrefix(value: string): string {
-  return value.replace(/^\d+[_\s-]*/, "").replace(/\.md$/, "");
-}
-
-function readOrder(value: string): number {
-  const match = value.match(/^(\d+)/);
-  return match ? Number.parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER;
-}
-
-function readTitle(fileName: string, markdown: string): string {
-  const heading = markdown.match(/^#\s+(.+)$/m);
-  return heading?.[1]?.trim() || stripNumberPrefix(fileName);
-}
-
-function slugify(value: string): string {
-  return encodeURIComponent(value);
-}
-
-function readChapters(): Chapter[] {
-  const docsDir = join(__dirname, "docs");
-
-  if (!existsSync(docsDir)) {
-    return [];
-  }
-
-  return readdirSync(docsDir)
-    .filter((entry) => statSync(join(docsDir, entry)).isDirectory())
-    .map((folderName) => {
-      const folderPath = join(docsDir, folderName);
-      const notes = readdirSync(folderPath)
-        .filter((entry) => entry.endsWith(".md"))
-        .map((fileName) => {
-          const markdown = readFileSync(join(folderPath, fileName), "utf8");
-
-          return {
-            id: slugify(`${folderName}/${fileName}`),
-            order: readOrder(fileName),
-            fileName,
-            title: readTitle(fileName, markdown),
-            markdown,
-          };
-        })
-        .sort((a, b) => a.order - b.order || a.fileName.localeCompare(b.fileName, "ja"));
-
-      return {
-        id: slugify(folderName),
-        order: readOrder(folderName),
-        folderName,
-        title: stripNumberPrefix(folderName),
-        notes,
-      };
-    })
-    .sort((a, b) => a.order - b.order || a.folderName.localeCompare(b.folderName, "ja"));
-}
 
 export default defineConfig({
   base: "/dotnet-modern-web-apps-notes/",
@@ -98,7 +43,7 @@ export default defineConfig({
       },
       load(id) {
         if (id === resolvedVirtualModuleId) {
-          return `export default ${JSON.stringify(readChapters())};`;
+          return `export default ${JSON.stringify(readChapters(__dirname))};`;
         }
 
         return null;
