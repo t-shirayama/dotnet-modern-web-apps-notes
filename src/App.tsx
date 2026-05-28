@@ -85,6 +85,7 @@ function MermaidDiagram({ chart }: { chart: string }) {
       .then((mermaid) => mermaid.render(`mermaid-${diagramId}`, chart))
       .then(({ svg }) => {
         if (!isCancelled && containerRef.current) {
+          // Mermaid is initialized with securityLevel: "strict"; only that generated SVG is inserted.
           containerRef.current.innerHTML = svg;
         }
       })
@@ -114,6 +115,20 @@ function MermaidDiagram({ chart }: { chart: string }) {
 }
 
 const markdownComponents: Components = {
+  a({ href, children, ...props }) {
+    const isExternal = href ? /^https?:\/\//.test(href) : false;
+
+    return (
+      <a
+        href={href}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        target={isExternal ? "_blank" : undefined}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
   code({ className, children, ...props }) {
     const language = /language-(\w+)/.exec(className || "")?.[1];
 
